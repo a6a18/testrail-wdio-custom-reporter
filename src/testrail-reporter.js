@@ -55,7 +55,7 @@ const updateTestRun = async () => {
           },
         },
       )
-      //console.log(resp.data);
+
   } catch (err) {
       // Handle Error Here
       console.error(err);
@@ -85,7 +85,7 @@ async function pushResults(testID, status, comment) {
 const createTestRun = async () => {
   let date = new Date()
   let title = params.title == undefined ? `${params.runName} ${date.getDate()}.${date.getMonth()} ${date.getHours()}:${date.getMinutes()}` : params.title
-  let boolValue = JSON.parse(params.includeAll);
+  let boolValue = true
   axios.post(
     `https://${params.domain}/index.php?/api/v2/add_run/${params.projectId}`,
     {
@@ -128,12 +128,12 @@ const getLastTestRun = async () => {
   .catch(function (error) {
     console.log(error);
   })
-  .then((response) => {
+  .then(async (response) => {
     if (response.data.size > 0){
       runId = response.data.runs[0].id
       console.log(`Update test suit: ${runId}`)
     }else{
-      createTestRun()
+      await createTestRun()
     }
   })
 
@@ -144,16 +144,10 @@ module.exports = class CustomReporter extends WDIOReporter {
     options = Object.assign(options, { stdout: true })
     super(options)
     params = options;
-    
-    if(params.sendReport === 'true'){
-      if(params.oneReport === 'true'){
-        getLastTestRun()
-      }else{
-        createTestRun()
-      }
-    }else{
-      console.log('Report is not sent!')
-    }
+
+    getLastTestRun().then(()=>{
+      console.log('get Run!')
+    })
 
   }
   onSuiteStart(test){
