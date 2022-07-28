@@ -11,7 +11,7 @@ To do so, log into your TestRail account and go to Administration > Site Setting
 ## Features
 
 - testrail
-- webdriverio/mocha
+- webdriverio
 
 
 ## Usage/Examples
