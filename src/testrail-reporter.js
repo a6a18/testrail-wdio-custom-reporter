@@ -144,10 +144,13 @@ module.exports = class CustomReporter extends WDIOReporter {
     options = Object.assign(options, { stdout: true })
     super(options)
     params = options;
+    
 
+  onRunnerStart() {
     getLastTestRun().then(()=>{
       console.log('get Run!')
     })
+  }
 
   }
   onSuiteStart(test){
